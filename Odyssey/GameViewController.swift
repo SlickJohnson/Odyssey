@@ -11,111 +11,147 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
+  let CategoryTree = 2
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // create and add a camera to the scene
-        let cameraNode = SCNNode()
-        cameraNode.camera = SCNCamera()
-        scene.rootNode.addChildNode(cameraNode)
-        
-        // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
-        
-        // create and add a light to the scene
-        let lightNode = SCNNode()
-        lightNode.light = SCNLight()
-        lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
-        scene.rootNode.addChildNode(lightNode)
-        
-        // create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
-        ambientLightNode.light = SCNLight()
-        ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
-        scene.rootNode.addChildNode(ambientLightNode)
-        
-        // retrieve the ship node
-        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
-        
-        // animate the 3d object
-        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-        
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // set the scene to the view
-        scnView.scene = scene
-        
-        // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
-        
-        // configure the view
-        scnView.backgroundColor = UIColor.black
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // check what nodes are tapped
-        let p = gestureRecognize.location(in: scnView)
-        let hitResults = scnView.hitTest(p, options: [:])
-        // check that we clicked on at least one object
-        if hitResults.count > 0 {
-            // retrieved the first clicked object
-            let result = hitResults[0]
-            
-            // get its material
-            let material = result.node.geometry!.firstMaterial!
-            
-            // highlight it
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            
-            // on completion - unhighlight
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
-            }
-            
-            material.emission.contents = UIColor.red
-            
-            SCNTransaction.commit()
-        }
-    }
-    
-    override var shouldAutorotate: Bool {
-        return true
-    }
-    
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
-    }
+  var sceneView: SCNView!
+  var scene: SCNScene!
 
+  var playerNode: SCNNode!
+  var selfieStickNode: SCNNode!
+
+  var motion = MotionHelper()
+  var motionForce = SCNVector3(0, 0, 0)
+
+  var sounds:[String:SCNAudioSource] = [:]
+
+  override func viewDidLoad() {
+    setupScene()
+    setupNodes()
+    setupSounds()
+  }
+
+  func setupScene() {
+    sceneView = self.view as! SCNView
+    sceneView.delegate = self
+
+    //sceneView.allowsCameraControl = true
+    scene = SCNScene(named: "art.scnassets/MainScene.scn")
+    sceneView.scene = scene
+
+    scene.physicsWorld.contactDelegate = self
+
+    let tapRecognizer = UITapGestureRecognizer()
+    tapRecognizer.numberOfTapsRequired = 1
+    tapRecognizer.numberOfTouchesRequired = 1
+
+    tapRecognizer.addTarget(self, action: #selector(sceneViewTapped(recognizer:)))
+    sceneView.addGestureRecognizer(tapRecognizer)
+  }
+
+  func setupNodes() {
+    playerNode = scene.rootNode.childNode(withName: "odd", recursively: true)!
+    playerNode.physicsBody?.contactTestBitMask = CategoryTree
+    selfieStickNode = scene.rootNode.childNode(withName: "selfieStick", recursively: true)!
+  }
+
+  func setupSounds() {
+    let sawSound = SCNAudioSource(fileNamed: "chainsaw.wav")!
+    let jumpSound = SCNAudioSource(fileNamed: "jump.wav")!
+    sawSound.load()
+    jumpSound.load()
+    sawSound.volume = 0.3
+    jumpSound.volume = 0.4
+
+    sounds["saw"] = sawSound
+    sounds["jump"] = jumpSound
+
+    let backgroundMusic = SCNAudioSource(fileNamed: "background.mp3")!
+    backgroundMusic.volume = 0.1
+    backgroundMusic.loops = true
+    backgroundMusic.load()
+
+    let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
+    playerNode.addAudioPlayer(musicPlayer)
+  }
+
+  @objc func sceneViewTapped (recognizer:UITapGestureRecognizer) {
+    let location = recognizer.location(in: sceneView)
+
+    let hitResults = sceneView.hitTest(location, options: nil)
+
+    guard hitResults.count > 0, let result = hitResults.first else { return }
+
+    let node = result.node
+    if node.name == "box" {
+      let jumpSound = sounds["jump"]!
+      playerNode.runAction(SCNAction.playAudio(jumpSound, waitForCompletion: false))
+      playerNode.physicsBody?.applyForce(SCNVector3(x: 0, y: 4, z: -2), asImpulse: true)
+    }
+  }
+
+  override var shouldAutorotate: Bool {
+    return false
+  }
+
+  override var prefersStatusBarHidden: Bool {
+    return true
+  }
+
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Release any cached data, images, etc that aren't in use.
+  }
 }
+
+extension GameViewController : SCNSceneRendererDelegate {
+  func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+    let player = playerNode.presentation
+    let playerPosition = player.position
+
+    let targetPosition = SCNVector3(x: playerPosition.x, y: playerPosition.y + 5, z: playerPosition.z + 5)
+    var cameraPosition = selfieStickNode.position
+
+    let camDamping: Float = 0.3
+
+    let xComponent = cameraPosition.x * (1 - camDamping) + targetPosition.x * camDamping
+    let yComponent = cameraPosition.y * (1 - camDamping) + targetPosition.y * camDamping
+    let zComponent = cameraPosition.z * (1 - camDamping) + targetPosition.z * camDamping
+
+    cameraPosition = SCNVector3(x: xComponent, y: yComponent, z: zComponent)
+    selfieStickNode.position = cameraPosition
+
+    motion.getAccelerometerData { (x, y, z) in
+      self.motionForce = SCNVector3(x: x * 0.10, y: 0, z: (y + 0.4) * -0.10)
+    }
+
+    playerNode.physicsBody?.applyForce(motionForce, asImpulse: true)
+  }
+}
+
+extension GameViewController: SCNPhysicsContactDelegate {
+  func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+    var contactNode: SCNNode!
+
+    if contact.nodeA.name == "player" {
+      contactNode = contact.nodeB
+    }else{
+      contactNode = contact.nodeA
+    }
+
+    if contactNode.physicsBody?.categoryBitMask == CategoryTree {
+      contactNode.isHidden = true
+
+      let sawSound = sounds["saw"]!
+      playerNode.runAction(SCNAction.playAudio(sawSound, waitForCompletion: false))
+
+      let waitAction = SCNAction.wait(duration: 15)
+      let unhideAction = SCNAction.run { (node) in
+        node.isHidden = false
+      }
+      let actionSequence = SCNAction.sequence([waitAction, unhideAction])
+
+      contactNode.runAction(actionSequence)
+    }
+  }
+}
+

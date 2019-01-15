@@ -13,6 +13,11 @@
 		3DC7DA6821ED48930078D1DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6621ED48930078D1DB /* Main.storyboard */; };
 		3DC7DA6A21ED48940078D1DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6921ED48940078D1DB /* Assets.xcassets */; };
 		3DC7DA6D21ED48940078D1DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6B21ED48940078D1DB /* LaunchScreen.storyboard */; };
+		3DC7DA8321ED7FFB0078D1DB /* MotionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DA7D21ED7FFB0078D1DB /* MotionHelper.swift */; };
+		3DC7DA8421ED7FFB0078D1DB /* VectorOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DA7E21ED7FFB0078D1DB /* VectorOperations.swift */; };
+		3DC7DA8521ED7FFB0078D1DB /* chainsaw.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA8021ED7FFB0078D1DB /* chainsaw.wav */; };
+		3DC7DA8621ED7FFB0078D1DB /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA8121ED7FFB0078D1DB /* jump.wav */; };
+		3DC7DA8721ED7FFB0078D1DB /* background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA8221ED7FFB0078D1DB /* background.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		3DC7DA6921ED48940078D1DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3DC7DA6C21ED48940078D1DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3DC7DA6E21ED48940078D1DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3DC7DA7D21ED7FFB0078D1DB /* MotionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionHelper.swift; sourceTree = "<group>"; };
+		3DC7DA7E21ED7FFB0078D1DB /* VectorOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VectorOperations.swift; sourceTree = "<group>"; };
+		3DC7DA8021ED7FFB0078D1DB /* chainsaw.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = chainsaw.wav; sourceTree = "<group>"; };
+		3DC7DA8121ED7FFB0078D1DB /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
+		3DC7DA8221ED7FFB0078D1DB /* background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +66,8 @@
 		3DC7DA5F21ED48930078D1DB /* Odyssey */ = {
 			isa = PBXGroup;
 			children = (
+				3DC7DA7C21ED7FFB0078D1DB /* Helper */,
+				3DC7DA7F21ED7FFB0078D1DB /* Sounds */,
 				3DC7DA6021ED48930078D1DB /* AppDelegate.swift */,
 				3DC7DA6221ED48930078D1DB /* art.scnassets */,
 				3DC7DA6421ED48930078D1DB /* GameViewController.swift */,
@@ -65,6 +77,25 @@
 				3DC7DA6E21ED48940078D1DB /* Info.plist */,
 			);
 			path = Odyssey;
+			sourceTree = "<group>";
+		};
+		3DC7DA7C21ED7FFB0078D1DB /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				3DC7DA7D21ED7FFB0078D1DB /* MotionHelper.swift */,
+				3DC7DA7E21ED7FFB0078D1DB /* VectorOperations.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		3DC7DA7F21ED7FFB0078D1DB /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				3DC7DA8021ED7FFB0078D1DB /* chainsaw.wav */,
+				3DC7DA8121ED7FFB0078D1DB /* jump.wav */,
+				3DC7DA8221ED7FFB0078D1DB /* background.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,9 +156,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DC7DA8621ED7FFB0078D1DB /* jump.wav in Resources */,
 				3DC7DA6321ED48930078D1DB /* art.scnassets in Resources */,
 				3DC7DA6D21ED48940078D1DB /* LaunchScreen.storyboard in Resources */,
 				3DC7DA6A21ED48940078D1DB /* Assets.xcassets in Resources */,
+				3DC7DA8521ED7FFB0078D1DB /* chainsaw.wav in Resources */,
+				3DC7DA8721ED7FFB0078D1DB /* background.mp3 in Resources */,
 				3DC7DA6821ED48930078D1DB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,8 +173,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DC7DA8421ED7FFB0078D1DB /* VectorOperations.swift in Sources */,
 				3DC7DA6521ED48930078D1DB /* GameViewController.swift in Sources */,
 				3DC7DA6121ED48930078D1DB /* AppDelegate.swift in Sources */,
+				3DC7DA8321ED7FFB0078D1DB /* MotionHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
