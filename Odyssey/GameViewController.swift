@@ -17,7 +17,9 @@ class GameViewController: UIViewController {
   var scene: SCNScene!
 
   var playerNode: SCNNode!
-  var selfieStickNode: SCNNode!
+  var cameraPivotNode: SCNNode!
+
+  var massLabel: SCNText!
 
   var motion = MotionHelper()
   var motionForce = SCNVector3(0, 0, 0)
@@ -29,6 +31,7 @@ class GameViewController: UIViewController {
     setupNodes()
     setupSounds()
   }
+  
 
   func setupScene() {
     sceneView = self.view as! SCNView
@@ -49,9 +52,12 @@ class GameViewController: UIViewController {
   }
 
   func setupNodes() {
-    playerNode = scene.rootNode.childNode(withName: "odd", recursively: true)!
+    playerNode = scene.rootNode.childNode(withName: "player", recursively: true)!
     playerNode.physicsBody?.contactTestBitMask = CategoryTree
-    selfieStickNode = scene.rootNode.childNode(withName: "selfieStick", recursively: true)!
+    cameraPivotNode = scene.rootNode.childNode(withName: "cameraPivot", recursively: true)!
+
+//    massLabel.string = "MASS"
+    cameraPivotNode.childNode(withName: "camera", recursively: true)
   }
 
   func setupSounds() {
@@ -74,7 +80,7 @@ class GameViewController: UIViewController {
     playerNode.addAudioPlayer(musicPlayer)
   }
 
-  @objc func sceneViewTapped (recognizer:UITapGestureRecognizer) {
+  @objc func sceneViewTapped (recognizer: UITapGestureRecognizer) {
     let location = recognizer.location(in: sceneView)
 
     let hitResults = sceneView.hitTest(location, options: nil)
@@ -82,7 +88,7 @@ class GameViewController: UIViewController {
     guard hitResults.count > 0, let result = hitResults.first else { return }
 
     let node = result.node
-    if node.name == "box" {
+    if node.name == "player" {
       let jumpSound = sounds["jump"]!
       playerNode.runAction(SCNAction.playAudio(jumpSound, waitForCompletion: false))
       playerNode.physicsBody?.applyForce(SCNVector3(x: 0, y: 4, z: -2), asImpulse: true)
@@ -109,7 +115,7 @@ extension GameViewController : SCNSceneRendererDelegate {
     let playerPosition = player.position
 
     let targetPosition = SCNVector3(x: playerPosition.x, y: playerPosition.y + 5, z: playerPosition.z + 5)
-    var cameraPosition = selfieStickNode.position
+    var cameraPosition = cameraPivotNode.position
 
     let camDamping: Float = 0.3
 
@@ -118,10 +124,10 @@ extension GameViewController : SCNSceneRendererDelegate {
     let zComponent = cameraPosition.z * (1 - camDamping) + targetPosition.z * camDamping
 
     cameraPosition = SCNVector3(x: xComponent, y: yComponent, z: zComponent)
-    selfieStickNode.position = cameraPosition
+    cameraPivotNode.position = cameraPosition
 
     motion.getAccelerometerData { (x, y, z) in
-      self.motionForce = SCNVector3(x: x * 0.10, y: 0, z: (y + 0.4) * -0.10)
+      self.motionForce = SCNVector3(x: x * 0.20, y: 0, z: (y + 0.4) * -0.20)
     }
 
     playerNode.physicsBody?.applyForce(motionForce, asImpulse: true)
