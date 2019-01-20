@@ -11,13 +11,24 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
-  let CategoryTree = 2
+
+  struct Category {
+    static let none = 0
+    static let player = 1
+    static let tree = 2
+    static let enemy = 3
+    static let floor = 4
+    static let all = Int.max
+  }
 
   var sceneView: SCNView!
   var scene: SCNScene!
 
   var playerNode: SCNNode!
+  var enemyNode: SCNNode!
+
   var cameraPivotNode: SCNNode!
+  var camera: SCNNode!
 
   var massLabel: SCNText!
 
@@ -31,7 +42,6 @@ class GameViewController: UIViewController {
     setupNodes()
     setupSounds()
   }
-  
 
   func setupScene() {
     sceneView = self.view as! SCNView
@@ -53,11 +63,22 @@ class GameViewController: UIViewController {
 
   func setupNodes() {
     playerNode = scene.rootNode.childNode(withName: "player", recursively: true)!
-    playerNode.physicsBody?.contactTestBitMask = CategoryTree
+    playerNode.physicsBody?.categoryBitMask = Category.player
+    playerNode.physicsBody?.contactTestBitMask = Category.tree | Category.enemy
+    playerNode.physicsBody?.collisionBitMask = Category.enemy | Category.floor | Category.tree
+
+    enemyNode = scene.rootNode.childNode(withName: "enemy", recursively: true)!
+    enemyNode.physicsBody?.categoryBitMask = Category.enemy
+    enemyNode.physicsBody?.contactTestBitMask = Category.player | Category.tree
+    enemyNode.physicsBody?.collisionBitMask = Category.player | Category.floor | Category.tree
+
     cameraPivotNode = scene.rootNode.childNode(withName: "cameraPivot", recursively: true)!
 
 //    massLabel.string = "MASS"
-    cameraPivotNode.childNode(withName: "camera", recursively: true)
+    camera = cameraPivotNode.childNode(withName: "camera", recursively: true)
+    camera.constraints = [SCNLookAtConstraint(target: playerNode)]
+
+    enemyNode.constraints = [SCNLookAtConstraint(target: playerNode)]
   }
 
   func setupSounds() {
@@ -70,15 +91,7 @@ class GameViewController: UIViewController {
 
     sounds["saw"] = sawSound
     sounds["jump"] = jumpSound
-
-    let backgroundMusic = SCNAudioSource(fileNamed: "background.mp3")!
-    backgroundMusic.volume = 0.1
-    backgroundMusic.loops = true
-    backgroundMusic.load()
-
-    let musicPlayer = SCNAudioPlayer(source: backgroundMusic)
-    playerNode.addAudioPlayer(musicPlayer)
-  }
+   }
 
   @objc func sceneViewTapped (recognizer: UITapGestureRecognizer) {
     let location = recognizer.location(in: sceneView)
@@ -114,6 +127,7 @@ extension GameViewController : SCNSceneRendererDelegate {
     let player = playerNode.presentation
     let playerPosition = player.position
 
+
     let targetPosition = SCNVector3(x: playerPosition.x, y: playerPosition.y + 5, z: playerPosition.z + 5)
     var cameraPosition = cameraPivotNode.position
 
@@ -127,10 +141,22 @@ extension GameViewController : SCNSceneRendererDelegate {
     cameraPivotNode.position = cameraPosition
 
     motion.getAccelerometerData { (x, y, z) in
-      self.motionForce = SCNVector3(x: x * 0.20, y: 0, z: (y + 0.4) * -0.20)
+      self.motionForce = SCNVector3(x: x * 0.30, y: 0, z: (y + 0.4) * -0.30)
     }
 
     playerNode.physicsBody?.applyForce(motionForce, asImpulse: true)
+
+    let enemyPosition = enemyNode.presentation.position
+    //Aim
+    let angle = enemyPosition.angleBetweenVectors(playerPosition)
+    
+//    enemyNode.rotation.z = angle
+
+    // Seek
+//    let vx = cos(angle) * 1
+//    let vz = sin(angle) * 1
+
+    enemyNode.physicsBody?.applyForce(SCNVector3(0, 0, 0), asImpulse: true)
   }
 }
 
@@ -144,7 +170,7 @@ extension GameViewController: SCNPhysicsContactDelegate {
       contactNode = contact.nodeA
     }
 
-    if contactNode.physicsBody?.categoryBitMask == CategoryTree {
+    if contactNode.physicsBody?.categoryBitMask == Category.tree {
       contactNode.isHidden = true
 
       let sawSound = sounds["saw"]!

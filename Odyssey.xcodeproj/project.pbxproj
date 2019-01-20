@@ -47,6 +47,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D9F3CB821F4FF8C00AE6238 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		3DC7DA5421ED48930078D1DB = {
 			isa = PBXGroup;
 			children = (
@@ -66,6 +73,7 @@
 		3DC7DA5F21ED48930078D1DB /* Odyssey */ = {
 			isa = PBXGroup;
 			children = (
+				3D9F3CB821F4FF8C00AE6238 /* Components */,
 				3DC7DA7C21ED7FFB0078D1DB /* Helper */,
 				3DC7DA7F21ED7FFB0078D1DB /* Sounds */,
 				3DC7DA6021ED48930078D1DB /* AppDelegate.swift */,
