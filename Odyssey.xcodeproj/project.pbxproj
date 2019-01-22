@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D9F3CBA21F5001300AE6238 /* RenderComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CB921F5001300AE6238 /* RenderComponent.swift */; };
+		3D9F3CBC21F5022A00AE6238 /* PlayerControlComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CBB21F5022A00AE6238 /* PlayerControlComponent.swift */; };
+		3D9F3CBE21F5032300AE6238 /* ParticleComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CBD21F5032300AE6238 /* ParticleComponent.swift */; };
+		3D9F3CC421F5061300AE6238 /* starburst.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D9F3CC021F5061300AE6238 /* starburst.png */; };
+		3D9F3CC521F5061300AE6238 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D9F3CC121F5061300AE6238 /* spark.png */; };
+		3D9F3CC621F5061300AE6238 /* Sparkle.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 3D9F3CC221F5061300AE6238 /* Sparkle.scnp */; };
+		3D9F3CC721F5061300AE6238 /* Fire.scnp in Resources */ = {isa = PBXBuildFile; fileRef = 3D9F3CC321F5061300AE6238 /* Fire.scnp */; };
+		3D9F3CC921F5580600AE6238 /* MoveBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CC821F5580600AE6238 /* MoveBehavior.swift */; };
+		3D9F3CCC21F5593000AE6238 /* MoveComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CCB21F5593000AE6238 /* MoveComponent.swift */; };
+		3D9F3CCF21F559AC00AE6238 /* EntityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CCE21F559AC00AE6238 /* EntityManager.swift */; };
+		3D9F3CD221F55E6D00AE6238 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CD121F55E6D00AE6238 /* PlayerNode.swift */; };
+		3D9F3CD421F55ECF00AE6238 /* EnemyNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CD321F55ECF00AE6238 /* EnemyNode.swift */; };
+		3D9F3CD621F560B000AE6238 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CD521F560B000AE6238 /* Player.swift */; };
+		3D9F3CD821F569E400AE6238 /* PhysicsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9F3CD721F569E400AE6238 /* PhysicsComponent.swift */; };
 		3DC7DA6121ED48930078D1DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6021ED48930078D1DB /* AppDelegate.swift */; };
 		3DC7DA6321ED48930078D1DB /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6221ED48930078D1DB /* art.scnassets */; };
 		3DC7DA6521ED48930078D1DB /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7DA6421ED48930078D1DB /* GameViewController.swift */; };
@@ -21,6 +35,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D9F3CB921F5001300AE6238 /* RenderComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderComponent.swift; sourceTree = "<group>"; };
+		3D9F3CBB21F5022A00AE6238 /* PlayerControlComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlComponent.swift; sourceTree = "<group>"; };
+		3D9F3CBD21F5032300AE6238 /* ParticleComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleComponent.swift; sourceTree = "<group>"; };
+		3D9F3CC021F5061300AE6238 /* starburst.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = starburst.png; sourceTree = "<group>"; };
+		3D9F3CC121F5061300AE6238 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		3D9F3CC221F5061300AE6238 /* Sparkle.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = Sparkle.scnp; sourceTree = "<group>"; };
+		3D9F3CC321F5061300AE6238 /* Fire.scnp */ = {isa = PBXFileReference; lastKnownFileType = file.scp; path = Fire.scnp; sourceTree = "<group>"; };
+		3D9F3CC821F5580600AE6238 /* MoveBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveBehavior.swift; sourceTree = "<group>"; };
+		3D9F3CCB21F5593000AE6238 /* MoveComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveComponent.swift; sourceTree = "<group>"; };
+		3D9F3CCE21F559AC00AE6238 /* EntityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityManager.swift; sourceTree = "<group>"; };
+		3D9F3CD121F55E6D00AE6238 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
+		3D9F3CD321F55ECF00AE6238 /* EnemyNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnemyNode.swift; sourceTree = "<group>"; };
+		3D9F3CD521F560B000AE6238 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		3D9F3CD721F569E400AE6238 /* PhysicsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsComponent.swift; sourceTree = "<group>"; };
 		3DC7DA5D21ED48930078D1DB /* Odyssey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Odyssey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DC7DA6021ED48930078D1DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DC7DA6221ED48930078D1DB /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -50,8 +78,50 @@
 		3D9F3CB821F4FF8C00AE6238 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				3D9F3CB921F5001300AE6238 /* RenderComponent.swift */,
+				3D9F3CBB21F5022A00AE6238 /* PlayerControlComponent.swift */,
+				3D9F3CBD21F5032300AE6238 /* ParticleComponent.swift */,
+				3D9F3CCB21F5593000AE6238 /* MoveComponent.swift */,
+				3D9F3CD721F569E400AE6238 /* PhysicsComponent.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		3D9F3CBF21F5061300AE6238 /* Particle Effects */ = {
+			isa = PBXGroup;
+			children = (
+				3D9F3CC021F5061300AE6238 /* starburst.png */,
+				3D9F3CC121F5061300AE6238 /* spark.png */,
+				3D9F3CC221F5061300AE6238 /* Sparkle.scnp */,
+				3D9F3CC321F5061300AE6238 /* Fire.scnp */,
+			);
+			path = "Particle Effects";
+			sourceTree = "<group>";
+		};
+		3D9F3CCA21F5588000AE6238 /* Behaviors */ = {
+			isa = PBXGroup;
+			children = (
+				3D9F3CC821F5580600AE6238 /* MoveBehavior.swift */,
+			);
+			path = Behaviors;
+			sourceTree = "<group>";
+		};
+		3D9F3CCD21F5599E00AE6238 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				3D9F3CCE21F559AC00AE6238 /* EntityManager.swift */,
+				3D9F3CD521F560B000AE6238 /* Player.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		3D9F3CD021F55E5B00AE6238 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				3D9F3CD121F55E6D00AE6238 /* PlayerNode.swift */,
+				3D9F3CD321F55ECF00AE6238 /* EnemyNode.swift */,
+			);
+			path = Nodes;
 			sourceTree = "<group>";
 		};
 		3DC7DA5421ED48930078D1DB = {
@@ -73,6 +143,10 @@
 		3DC7DA5F21ED48930078D1DB /* Odyssey */ = {
 			isa = PBXGroup;
 			children = (
+				3D9F3CD021F55E5B00AE6238 /* Nodes */,
+				3D9F3CCD21F5599E00AE6238 /* Entities */,
+				3D9F3CCA21F5588000AE6238 /* Behaviors */,
+				3D9F3CBF21F5061300AE6238 /* Particle Effects */,
 				3D9F3CB821F4FF8C00AE6238 /* Components */,
 				3DC7DA7C21ED7FFB0078D1DB /* Helper */,
 				3DC7DA7F21ED7FFB0078D1DB /* Sounds */,
@@ -165,11 +239,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DC7DA8621ED7FFB0078D1DB /* jump.wav in Resources */,
+				3D9F3CC521F5061300AE6238 /* spark.png in Resources */,
+				3D9F3CC621F5061300AE6238 /* Sparkle.scnp in Resources */,
 				3DC7DA6321ED48930078D1DB /* art.scnassets in Resources */,
+				3D9F3CC421F5061300AE6238 /* starburst.png in Resources */,
 				3DC7DA6D21ED48940078D1DB /* LaunchScreen.storyboard in Resources */,
 				3DC7DA6A21ED48940078D1DB /* Assets.xcassets in Resources */,
 				3DC7DA8521ED7FFB0078D1DB /* chainsaw.wav in Resources */,
 				3DC7DA8721ED7FFB0078D1DB /* background.mp3 in Resources */,
+				3D9F3CC721F5061300AE6238 /* Fire.scnp in Resources */,
 				3DC7DA6821ED48930078D1DB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,9 +259,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D9F3CCF21F559AC00AE6238 /* EntityManager.swift in Sources */,
+				3D9F3CD821F569E400AE6238 /* PhysicsComponent.swift in Sources */,
 				3DC7DA8421ED7FFB0078D1DB /* VectorOperations.swift in Sources */,
 				3DC7DA6521ED48930078D1DB /* GameViewController.swift in Sources */,
+				3D9F3CBC21F5022A00AE6238 /* PlayerControlComponent.swift in Sources */,
 				3DC7DA6121ED48930078D1DB /* AppDelegate.swift in Sources */,
+				3D9F3CD621F560B000AE6238 /* Player.swift in Sources */,
+				3D9F3CD221F55E6D00AE6238 /* PlayerNode.swift in Sources */,
+				3D9F3CC921F5580600AE6238 /* MoveBehavior.swift in Sources */,
+				3D9F3CCC21F5593000AE6238 /* MoveComponent.swift in Sources */,
+				3D9F3CBA21F5001300AE6238 /* RenderComponent.swift in Sources */,
+				3D9F3CBE21F5032300AE6238 /* ParticleComponent.swift in Sources */,
+				3D9F3CD421F55ECF00AE6238 /* EnemyNode.swift in Sources */,
 				3DC7DA8321ED7FFB0078D1DB /* MotionHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

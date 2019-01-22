@@ -9,9 +9,14 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import GameplayKit
 
 class GameViewController: UIViewController {
 
+  // MARK: Properties
+  var entityManager: EntityManager!
+
+  /// The physics categories for the nodes in the scene.
   struct Category {
     static let none = 0
     static let player = 1
@@ -23,6 +28,20 @@ class GameViewController: UIViewController {
 
   var sceneView: SCNView!
   var scene: SCNScene!
+
+  /// Manages player control components.
+  let playerControlComponentSystem = GKComponentSystem(componentClass: PlayerControlComponent.self)
+
+  /// Manages particle components.
+  let particleComponentSystem = GKComponentSystem(componentClass: ParticleComponent.self)
+
+  /// Holds entities to prevent deallocation.
+  var entities = [GKEntity]()
+
+  /// Last update time.
+  var previousUpdateTime: TimeInterval = 0
+
+  // MARK: Initialization
 
   var playerNode: SCNNode!
   var enemyNode: SCNNode!
@@ -41,8 +60,27 @@ class GameViewController: UIViewController {
     setupScene()
     setupNodes()
     setupSounds()
+
+    setUpEntities()
+    addComponentsToComonentSystems()
   }
 
+  override var shouldAutorotate: Bool {
+    return false
+  }
+
+  override var prefersStatusBarHidden: Bool {
+    return true
+  }
+
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Release any cached data, images, etc that aren't in use.
+  }
+}
+
+// MARK: - Methods
+extension GameViewController {
   func setupScene() {
     sceneView = self.view as! SCNView
     sceneView.delegate = self
@@ -74,11 +112,9 @@ class GameViewController: UIViewController {
 
     cameraPivotNode = scene.rootNode.childNode(withName: "cameraPivot", recursively: true)!
 
-//    massLabel.string = "MASS"
+    //    massLabel.string = "MASS"
     camera = cameraPivotNode.childNode(withName: "camera", recursively: true)
     camera.constraints = [SCNLookAtConstraint(target: playerNode)]
-
-    enemyNode.constraints = [SCNLookAtConstraint(target: playerNode)]
   }
 
   func setupSounds() {
@@ -91,7 +127,45 @@ class GameViewController: UIViewController {
 
     sounds["saw"] = sawSound
     sounds["jump"] = jumpSound
-   }
+  }
+
+  func setUpEntities() {
+    entityManager = EntityManager(scene: scene)
+    
+  }
+
+  func makeBoxEntity(forNodeWithName name: String, wantsPlayerControlComponent: Bool = false, withParticleComponentNamed particleComponentName: String? = nil) -> GKEntity {
+    // Create the box entity and grab its node from the scene.
+    let box = GKEntity()
+    guard let boxNode = scene.rootNode.childNode(withName: name, recursively: false) else {
+      fatalError("Making box with name \(name) failed because the GameScene scene file contains no nodes with that name.")
+    }
+
+//    // Create and attach a geometry component to the box.
+//    let geometryComponent = GeometryComponent(geometryNode: boxNode)
+//    box.addComponent(geometryComponent)
+
+    // If requested, create and attach a particle component.
+    if let particleComponentName = particleComponentName {
+      let particleComponent = ParticleComponent(particleName: particleComponentName)
+      box.addComponent(particleComponent)
+    }
+
+    // If requested, create and attach a player control component.
+    if wantsPlayerControlComponent {
+      let playerControlComponent = PlayerControlComponent()
+      box.addComponent(playerControlComponent)
+    }
+
+    return box
+  }
+
+  func addComponentsToComonentSystems() {
+    for entity in entities {
+      particleComponentSystem.addComponent(foundIn: entity)
+      playerControlComponentSystem.addComponent(foundIn: entity)
+    }
+  }
 
   @objc func sceneViewTapped (recognizer: UITapGestureRecognizer) {
     let location = recognizer.location(in: sceneView)
@@ -107,19 +181,6 @@ class GameViewController: UIViewController {
       playerNode.physicsBody?.applyForce(SCNVector3(x: 0, y: 4, z: -2), asImpulse: true)
     }
   }
-
-  override var shouldAutorotate: Bool {
-    return false
-  }
-
-  override var prefersStatusBarHidden: Bool {
-    return true
-  }
-
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Release any cached data, images, etc that aren't in use.
-  }
 }
 
 extension GameViewController : SCNSceneRendererDelegate {
@@ -127,11 +188,16 @@ extension GameViewController : SCNSceneRendererDelegate {
     let player = playerNode.presentation
     let playerPosition = player.position
 
+    let timeSincePreviousUpdate = time - previousUpdateTime
 
-    let targetPosition = SCNVector3(x: playerPosition.x, y: playerPosition.y + 5, z: playerPosition.z + 5)
+    particleComponentSystem.update(deltaTime: timeSincePreviousUpdate)
+
+    previousUpdateTime = time
+
+    let targetPosition = SCNVector3(x: playerPosition.x, y: playerPosition.y + 5, z: playerPosition.z)
     var cameraPosition = cameraPivotNode.position
 
-    let camDamping: Float = 0.3
+    let camDamping: Float = 0.25
 
     let xComponent = cameraPosition.x * (1 - camDamping) + targetPosition.x * camDamping
     let yComponent = cameraPosition.y * (1 - camDamping) + targetPosition.y * camDamping
@@ -141,22 +207,23 @@ extension GameViewController : SCNSceneRendererDelegate {
     cameraPivotNode.position = cameraPosition
 
     motion.getAccelerometerData { (x, y, z) in
-      self.motionForce = SCNVector3(x: x * 0.30, y: 0, z: (y + 0.4) * -0.30)
+      self.motionForce = SCNVector3(x: x * 4, y: 0, z: (z + 0.3) * 2)
     }
 
-    playerNode.physicsBody?.applyForce(motionForce, asImpulse: true)
+    playerNode.physicsBody?.applyForce(motionForce, asImpulse: false)
 
     let enemyPosition = enemyNode.presentation.position
     //Aim
-    let angle = enemyPosition.angleBetweenVectors(playerPosition)
-    
-//    enemyNode.rotation.z = angle
+    let dx = playerPosition.x - enemyPosition.x
+    let dz = playerPosition.z - enemyPosition.z
+    print("Enemy: \(enemyNode.physicsBody!.velocity)\nPlayer: \(playerNode.physicsBody!.velocity)\n\n")
+    let angle = atan2(dz, dx)
 
     // Seek
-//    let vx = cos(angle) * 1
-//    let vz = sin(angle) * 1
+    let vx = cos(angle) * 4.5
+    let vz = sin(angle) * 4.5
 
-    enemyNode.physicsBody?.applyForce(SCNVector3(0, 0, 0), asImpulse: true)
+    enemyNode.physicsBody?.applyForce(SCNVector3(vx, 0, vz), asImpulse: false)
   }
 }
 
@@ -181,7 +248,7 @@ extension GameViewController: SCNPhysicsContactDelegate {
         node.isHidden = false
       }
       let actionSequence = SCNAction.sequence([waitAction, unhideAction])
-
+  
       contactNode.runAction(actionSequence)
     }
   }
